@@ -64,7 +64,7 @@ export default function Home() {
             locations={[0, 0.4, 0.64, 0.84, 0.96, 1]}
             style={StyleSheet.absoluteFill}
           />
-          <View style={[styles.topBarWrap, { paddingTop: insets.top + 8 }]}>
+          <View style={[styles.topBarWrap, { paddingTop: insets.top }]}>
             <View style={styles.topBar}>
               <View style={styles.avatar}>
                 <Svg width={20} height={20} viewBox="0 0 24 24">
