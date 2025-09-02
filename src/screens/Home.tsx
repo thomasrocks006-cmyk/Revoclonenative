@@ -1,7 +1,7 @@
 // Home screen (clean)
 import React, { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { Search, BarChart3, Menu, Plus, ArrowUpDown, MoreHorizontal, ChevronRight } from "lucide-react-native";
 import { Svg, Defs, LinearGradient as SvgLinearGradient, Stop, Path } from "react-native-svg";
@@ -38,6 +38,7 @@ function formatDate(d?: string | number | Date) {
 }
 
 export default function Home() {
+  const insets = useSafeAreaInsets();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const user: User = { id: "1", firstName: "Thomas", lastName: "Francis" }; // currently unused
   const transactions: Transaction[] = [
@@ -54,16 +55,16 @@ export default function Home() {
   ];
 
   return (
-    <SafeAreaView style={styles.safe} edges={["top"]}>
+    <View style={styles.safe}>
       <View style={styles.root}>
         {/* Header / Balance area */}
-        <View style={{ height: 580 }}>
+        <View style={{ height: 580 + insets.top, marginTop: -insets.top }}>
           <LinearGradient
             colors={["#1e40af", "#0a2269", "#03103f", "#01041c", "rgba(0,0,0,0.85)", "transparent"]}
             locations={[0, 0.4, 0.64, 0.84, 0.96, 1]}
             style={StyleSheet.absoluteFill}
           />
-          <View style={styles.topBarWrap}>
+          <View style={[styles.topBarWrap, { paddingTop: insets.top + 8 }]}>
             <View style={styles.topBar}>
               <View style={styles.avatar}>
                 <Svg width={20} height={20} viewBox="0 0 24 24">
@@ -212,7 +213,7 @@ export default function Home() {
           </View>
         </ScrollView>
       </View>
-    </SafeAreaView>
+  </View>
   );
 }
 
