@@ -56,14 +56,16 @@ export default function Home() {
   return (
     <SafeAreaView style={styles.safe} edges={[]}> {/* we manually offset content */}
       <View style={styles.root}>
-        {/* Header / Balance area */}
-        <View style={[styles.header, { height: 580 + insets.top }]}> {/* extend header behind status bar */}
-          <LinearGradient
-            colors={["#1e40af", "#0a2269", "#03103f", "#01041c", "rgba(0,0,0,0.85)", "transparent"]}
-            locations={[0, 0.4, 0.64, 0.84, 0.96, 1]}
-            style={StyleSheet.absoluteFill}
-          />
-          <View style={{ paddingTop: insets.top }}> {/* restore original vertical position */}
+        {/* Background gradient extending behind status bar */}
+        <LinearGradient
+          colors={["#1e40af", "#0a2269", "#03103f", "#01041c", "rgba(0,0,0,0.85)", "rgba(0,0,0,0.85)"]}
+          locations={[0, 0.4, 0.64, 0.84, 0.96, 1]}
+          style={[StyleSheet.absoluteFill, { height: 580 + insets.top }]}
+        />
+        
+        <ScrollView style={styles.content} contentContainerStyle={{ paddingBottom: 96 }} showsVerticalScrollIndicator={false}>
+          {/* Header / Balance area - now inside ScrollView */}
+          <View style={[styles.header, { paddingTop: insets.top, marginTop: 0 }]}>
             {/* Unified header row identical to Invest screen */}
             <View style={styles.headerRow}>
               <View style={styles.profileIcon}>
@@ -89,11 +91,8 @@ export default function Home() {
               <Button label="Accounts" style={styles.accountsBtn} />
             </View>
           </View>
-        </View>
-
-        <ScrollView style={styles.content} contentContainerStyle={{ paddingBottom: 96 }} showsVerticalScrollIndicator={false}>
           {/* Quick actions */}
-          <View style={styles.quickRow}>
+          <View style={[styles.quickRow, { marginTop: 24 }]}>
             {[
               { key: "add", label: "Add money", icon: <Plus size={20} color="#fff" /> },
               { key: "payid", label: "PayID", icon: <Text style={styles.payId}>iD</Text> },
@@ -271,7 +270,7 @@ function WatchRow({ dot, label, sub, price, pct }: { dot: "bg" | "flag"; label: 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#0B0D18" },
   root: { flex: 1, backgroundColor: "#0B0D18" },
-  header: { position: "relative" },
+  header: { position: "relative", minHeight: 580 },
   // Invest-like header styles for unified look
   headerRow: { flexDirection: "row", alignItems: "center", paddingHorizontal: 16, paddingVertical: 12, gap: 12 },
   profileIcon: { width: 32, height: 32, backgroundColor: "#F97316", borderRadius: 16, justifyContent: "center", alignItems: "center" },
@@ -286,13 +285,13 @@ const styles = StyleSheet.create({
   balanceWhole: { color: "#fff", fontSize: 40, lineHeight: 40, marginTop: 10, marginRight: 2 },
   balanceCents: { color: "#fff", fontSize: 22, lineHeight: 22, marginTop: 10 },
   accountsBtn: { marginTop: 19, height: 38, width: 85, borderRadius: 999, backgroundColor: "rgba(88,100,165,0.6)", borderWidth: 1, borderColor: "rgba(255,255,255,0.15)" },
-  content: { paddingHorizontal: 8, marginTop: -187 },
+  content: { paddingHorizontal: 8 },
   quickRow: { flexDirection: "row", justifyContent: "space-between", gap: 8 },
   quickItem: { width: (width - 8 * 2 - 8 * 3) / 4, alignItems: "center" },
   quickCircle: { width: 52, height: 52, borderRadius: 26, backgroundColor: "rgba(255,255,255,0.15)", alignItems: "center", justifyContent: "center" },
   quickLabel: { marginTop: 8, fontSize: 12, color: "rgba(255,255,255,0.8)" },
   payId: { fontSize: 12, fontWeight: "900", color: "#fff" },
-  card: { marginTop: 36, borderRadius: 22, backgroundColor: "rgba(15,18,36,0.95)", padding: 16 },
+  card: { marginTop: 24, borderRadius: 22, backgroundColor: "rgba(15,18,36,0.95)", padding: 16 },
   txRow: { flexDirection: "row", alignItems: "center" },
   txAvatar: { width: 36, height: 36, borderRadius: 18, backgroundColor: "#000", alignItems: "center", justifyContent: "center" },
   txDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: "#fff" },
