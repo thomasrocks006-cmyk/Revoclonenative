@@ -1,27 +1,15 @@
 import React from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, StatusBar } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, StatusBar, Dimensions } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Search, TrendingUp, Plus, ArrowDown, MoreHorizontal, ChevronUp, ChevronRight, BarChart2, Globe } from "lucide-react-native";
 
 export default function Invest() {
+  const { width } = Dimensions.get("window");
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <StatusBar barStyle="light-content" backgroundColor="#0f766e" />
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Status Bar (mocked UI row) */}
-        <View style={styles.statusBar}>
-          <Text style={styles.statusText}>12:44 🌙</Text>
-          <View style={styles.statusRight}>
-            <View style={styles.signalBars}>
-              <View style={[styles.signalBar, styles.signalBarActive]} />
-              <View style={[styles.signalBar, styles.signalBarActive]} />
-              <View style={[styles.signalBar, styles.signalBarInactive]} />
-              <View style={[styles.signalBar, styles.signalBarInactive]} />
-            </View>
-            <Text style={styles.statusText}>📶 📶 🔋</Text>
-          </View>
-        </View>
+  <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
 
         {/* Header */}
         <View style={styles.header}>
@@ -62,25 +50,25 @@ export default function Invest() {
 
         {/* Action Buttons */}
         <View style={styles.actionButtons}>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
             <View style={styles.actionButtonIcon}>
               <TrendingUp size={20} color="white" />
             </View>
             <Text style={styles.actionButtonText}>Trade</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
             <View style={styles.actionButtonIcon}>
               <Plus size={20} color="white" />
             </View>
             <Text style={styles.actionButtonText}>Add money</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
             <View style={styles.actionButtonIcon}>
               <ArrowDown size={20} color="white" />
             </View>
             <Text style={styles.actionButtonText}>Withdraw</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
             <View style={styles.actionButtonIcon}>
               <MoreHorizontal size={20} color="white" />
             </View>
@@ -438,19 +426,20 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   actionButtons: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 32,
-    marginBottom: 32,
+  flexDirection: "row",
+  justifyContent: "space-between",
+  gap: 8,
+  paddingHorizontal: 8,
+  marginBottom: 32,
   },
   actionButton: {
-    alignItems: "center",
+  alignItems: "center",
   },
   actionButtonIcon: {
-    width: 48,
-    height: 48,
+  width: 52,
+  height: 52,
     backgroundColor: "rgba(15, 118, 110, 0.5)",
-    borderRadius: 24,
+  borderRadius: 26,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 8,
