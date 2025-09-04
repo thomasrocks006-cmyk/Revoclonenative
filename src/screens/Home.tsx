@@ -1,9 +1,9 @@
 // Home screen (clean)
 import React, { useMemo } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, TextInput } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { Search, BarChart3, Menu, Plus, ArrowUpDown, MoreHorizontal, ChevronRight } from "lucide-react-native";
+import { Search, BarChart3, BarChart2, Globe, Plus, ArrowUpDown, MoreHorizontal, ChevronRight } from "lucide-react-native";
 import { Svg, Defs, LinearGradient as SvgLinearGradient, Stop, Path } from "react-native-svg";
 import { useNavigation } from "@react-navigation/native"; 
 import Button from "../components/ui/Button";
@@ -64,22 +64,21 @@ export default function Home() {
             style={StyleSheet.absoluteFill}
           />
           <View style={{ paddingTop: insets.top }}> {/* restore original vertical position */}
-            <View style={styles.topBarWrap}>
-              <View style={styles.topBar}>
-                <View style={styles.avatar}>
-                  <Svg width={20} height={20} viewBox="0 0 24 24">
-                    <Path d="M3 7h2l2-3h6l2 3h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2zm9 4a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="#fff" />
-                  </Svg>
-                </View>
-                <TouchableOpacity activeOpacity={0.8} style={styles.searchPill}>
-                  <Search size={18} color="rgba(255,255,255,0.85)" />
-                  <Text style={styles.searchText}>Search</Text>
-                </TouchableOpacity>
-                <View style={styles.rightIcons}>
-                  <View style={styles.circleBtn}><BarChart3 size={18} color="#fff" /></View>
-                  <View style={styles.circleBtn}><Menu size={18} color="#fff" /></View>
-                </View>
+            {/* Unified header row identical to Invest screen */}
+            <View style={styles.headerRow}>
+              <View style={styles.profileIcon}>
+                <Text style={styles.profileText}>TF</Text>
               </View>
+              <View style={styles.searchContainer}>
+                <Search size={16} color="#9CA3AF" style={styles.searchIcon} />
+                <TextInput placeholder="Search" placeholderTextColor="#D1D5DB" style={styles.searchInput} />
+              </View>
+              <TouchableOpacity style={styles.headerButton}>
+                <BarChart2 size={16} color="#000" />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.headerButton}>
+                <Globe size={16} color="#000" />
+              </TouchableOpacity>
             </View>
             <View style={styles.centerStack}>
               <Text style={styles.accountType}>Personal · AUD</Text>
@@ -273,13 +272,14 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#0B0D18" },
   root: { flex: 1, backgroundColor: "#0B0D18" },
   header: { position: "relative" },
-  topBarWrap: { paddingTop: 8, paddingHorizontal: 8 },
-  topBar: { flexDirection: "row", alignItems: "center", gap: 8 },
-  avatar: { width: 36, height: 36, borderRadius: 18, backgroundColor: "#F59E0B", alignItems: "center", justifyContent: "center" },
-  searchPill: { flex: 1, height: 40, borderRadius: 22, backgroundColor: "rgba(255,255,255,0.18)", borderWidth: 1, borderColor: "rgba(255,255,255,0.15)", flexDirection: "row", alignItems: "center", paddingHorizontal: 12, gap: 8 },
-  searchText: { color: "rgba(255,255,255,0.75)", fontSize: 13 },
-  rightIcons: { flexDirection: "row", alignItems: "center", gap: 8 },
-  circleBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: "rgba(255,255,255,0.12)", borderWidth: 1, borderColor: "rgba(255,255,255,0.10)", alignItems: "center", justifyContent: "center" },
+  // Invest-like header styles for unified look
+  headerRow: { flexDirection: "row", alignItems: "center", paddingHorizontal: 16, paddingVertical: 12, gap: 12 },
+  profileIcon: { width: 32, height: 32, backgroundColor: "#F97316", borderRadius: 16, justifyContent: "center", alignItems: "center" },
+  profileText: { color: "white", fontSize: 14, fontWeight: "400" },
+  searchContainer: { flex: 1, position: "relative" },
+  searchIcon: { position: "absolute", left: 12, top: 10, zIndex: 1 },
+  searchInput: { backgroundColor: "rgba(255, 255, 255, 0.45)", borderRadius: 20, paddingVertical: 8, paddingLeft: 40, paddingRight: 16, color: "white", fontSize: 16 },
+  headerButton: { width: 32, height: 32, borderRadius: 16, backgroundColor: "rgba(255, 255, 255, 0.45)", justifyContent: "center", alignItems: "center" },
   centerStack: { alignItems: "center", paddingTop: 48 },
   accountType: { color: "rgba(255,255,255,0.65)", fontSize: 12, marginTop: 32, marginBottom: 6 },
   balanceRow: { flexDirection: "row", alignItems: "flex-start" },
