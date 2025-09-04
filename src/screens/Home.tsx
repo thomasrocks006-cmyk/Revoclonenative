@@ -1,13 +1,11 @@
 // Home screen (clean)
 import React, { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { Search, BarChart3, Menu, Plus, ArrowUpDown, MoreHorizontal, ChevronRight } from "lucide-react-native";
 import { Svg, Defs, LinearGradient as SvgLinearGradient, Stop, Path } from "react-native-svg";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { RootStackParamList } from "../../App";
+import { useNavigation } from "@react-navigation/native"; 
 import Button from "../components/ui/Button";
 import RevolutCardsWidget, { CardData } from "../components/RevolutCardsWidget";
 
@@ -38,8 +36,9 @@ function formatDate(d?: string | number | Date) {
 }
 
 export default function Home() {
+  // We manually handle the top inset so gradient fills status bar while keeping content position.
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<any>();
   const user: User = { id: "1", firstName: "Thomas", lastName: "Francis" }; // currently unused
   const transactions: Transaction[] = [
     { id: "t1", merchant: "GitHub", createdAt: new Date().toISOString(), status: "Reverted", amount: 1.55 },
@@ -55,39 +54,41 @@ export default function Home() {
   ];
 
   return (
-    <View style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={[]}> {/* we manually offset content */}
       <View style={styles.root}>
         {/* Header / Balance area */}
-        <View style={{ height: 580 + insets.top, marginTop: -insets.top }}>
+        <View style={[styles.header, { height: 580 + insets.top }]}> {/* extend header behind status bar */}
           <LinearGradient
             colors={["#1e40af", "#0a2269", "#03103f", "#01041c", "rgba(0,0,0,0.85)", "transparent"]}
             locations={[0, 0.4, 0.64, 0.84, 0.96, 1]}
             style={StyleSheet.absoluteFill}
           />
-          <View style={[styles.topBarWrap, { paddingTop: insets.top }]}>
-            <View style={styles.topBar}>
-              <View style={styles.avatar}>
-                <Svg width={20} height={20} viewBox="0 0 24 24">
-                  <Path d="M3 7h2l2-3h6l2 3h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2zm9 4a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="#fff" />
-                </Svg>
-              </View>
-              <TouchableOpacity activeOpacity={0.8} style={styles.searchPill}>
-                <Search size={18} color="rgba(255,255,255,0.85)" />
-                <Text style={styles.searchText}>Search</Text>
-              </TouchableOpacity>
-              <View style={styles.rightIcons}>
-                <View style={styles.circleBtn}><BarChart3 size={18} color="#fff" /></View>
-                <View style={styles.circleBtn}><Menu size={18} color="#fff" /></View>
+          <View style={{ paddingTop: insets.top }}> {/* restore original vertical position */}
+            <View style={styles.topBarWrap}>
+              <View style={styles.topBar}>
+                <View style={styles.avatar}>
+                  <Svg width={20} height={20} viewBox="0 0 24 24">
+                    <Path d="M3 7h2l2-3h6l2 3h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2zm9 4a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="#fff" />
+                  </Svg>
+                </View>
+                <TouchableOpacity activeOpacity={0.8} style={styles.searchPill}>
+                  <Search size={18} color="rgba(255,255,255,0.85)" />
+                  <Text style={styles.searchText}>Search</Text>
+                </TouchableOpacity>
+                <View style={styles.rightIcons}>
+                  <View style={styles.circleBtn}><BarChart3 size={18} color="#fff" /></View>
+                  <View style={styles.circleBtn}><Menu size={18} color="#fff" /></View>
+                </View>
               </View>
             </View>
-          </View>
-          <View style={styles.centerStack}>
-            <Text style={styles.accountType}>Personal · AUD</Text>
-            <View style={styles.balanceRow}>
-              <Text style={styles.balanceWhole}>{whole}</Text>
-              <Text style={styles.balanceCents}>.{cents}</Text>
+            <View style={styles.centerStack}>
+              <Text style={styles.accountType}>Personal · AUD</Text>
+              <View style={styles.balanceRow}>
+                <Text style={styles.balanceWhole}>{whole}</Text>
+                <Text style={styles.balanceCents}>.{cents}</Text>
+              </View>
+              <Button label="Accounts" style={styles.accountsBtn} />
             </View>
-            <Button label="Accounts" style={styles.accountsBtn} />
           </View>
         </View>
 
@@ -213,7 +214,7 @@ export default function Home() {
           </View>
         </ScrollView>
       </View>
-  </View>
+    </SafeAreaView>
   );
 }
 
@@ -271,6 +272,7 @@ function WatchRow({ dot, label, sub, price, pct }: { dot: "bg" | "flag"; label: 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#0B0D18" },
   root: { flex: 1, backgroundColor: "#0B0D18" },
+  header: { position: "relative" },
   topBarWrap: { paddingTop: 8, paddingHorizontal: 8 },
   topBar: { flexDirection: "row", alignItems: "center", gap: 8 },
   avatar: { width: 36, height: 36, borderRadius: 18, backgroundColor: "#F59E0B", alignItems: "center", justifyContent: "center" },
