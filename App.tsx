@@ -5,18 +5,21 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Home from "./src/screens/Home";
 import Invest from "./src/screens/Invest";
+import Payments from "./src/screens/Payments";
 import Crypto from "./src/screens/Crypto";
 import Transactions from "./src/screens/Transactions";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { TrendingUp, Home as HomeIcon, Bitcoin } from "lucide-react-native";
+import { TrendingUp, Home as HomeIcon, ArrowRightLeft, Bitcoin } from "lucide-react-native";
 import { useColorScheme } from "react-native";
 export type RootStackParamList = {
   Tabs: undefined;
   Transactions: undefined;
 };
+
 type RootTabParamList = {
   Home: undefined;
   Invest: undefined;
+  Payments: undefined;
   Crypto: undefined;
 };
 
@@ -46,6 +49,14 @@ function Tabs() {
         component={Invest}
         options={{
           tabBarIcon: ({ color, size }) => <TrendingUp color={color} size={size} />,
+        }}
+      />
+      <Tab.Screen
+        name="Payments"
+        component={Payments}
+        options={{
+          tabBarIcon: ({ color, size }) => <ArrowRightLeft color={color} size={size} />,
+          tabBarLabel: "Payments",
         }}
       />
       <Tab.Screen
