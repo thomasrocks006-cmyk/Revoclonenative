@@ -5,9 +5,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Home from "./src/screens/Home";
 import Invest from "./src/screens/Invest";
+import Crypto from "./src/screens/Crypto";
 import Transactions from "./src/screens/Transactions";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { TrendingUp, Home as HomeIcon } from "lucide-react-native";
+import { TrendingUp, Home as HomeIcon, Bitcoin } from "lucide-react-native";
 import { useColorScheme } from "react-native";
 export type RootStackParamList = {
   Tabs: undefined;
@@ -16,6 +17,7 @@ export type RootStackParamList = {
 type RootTabParamList = {
   Home: undefined;
   Invest: undefined;
+  Crypto: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -44,6 +46,14 @@ function Tabs() {
         component={Invest}
         options={{
           tabBarIcon: ({ color, size }) => <TrendingUp color={color} size={size} />,
+        }}
+      />
+      <Tab.Screen
+        name="Crypto"
+        component={Crypto}
+        options={{
+          tabBarIcon: ({ color, size }) => <Bitcoin color={color} size={size} />,
+          tabBarLabel: "Crypto",
         }}
       />
     </Tab.Navigator>
