@@ -3,302 +3,304 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Status
 import Svg, { Path } from "react-native-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Search, TrendingUp, Plus, ArrowDown, MoreHorizontal, ChevronUp, ChevronRight, BarChart2, Globe } from "lucide-react-native";
+import { 
+  FinancialCard,
+  MostTradedWidget, 
+  ProductsWidget, 
+  TopMoversWidget, 
+  TransactionsWidget,
+  ThemeProvider,
+  type StockItem,
+  type TradedStock,
+  type Stock,
+  type Transaction 
+} from '../components/widgets';
 
 export default function Invest() {
   const { width } = Dimensions.get("window");
+
+  // Sample data for widgets
+  const stockItems: StockItem[] = [
+    {
+      id: "1",
+      name: "Taiwan Semiconductor",
+      symbol: "TSM",
+      shares: "0.01",
+      currentPrice: "US$228.10",
+      portfolioValue: "$2.62",
+      change: "0.76%",
+      isPositive: true,
+      logo: <View style={[styles.stockIcon, { backgroundColor: "#EC4899" }]}><View style={styles.stockIconDot} /></View>
+    },
+    {
+      id: "2", 
+      name: "NVIDIA",
+      symbol: "NVDA",
+      shares: "0.01",
+      currentPrice: "US$169.56",
+      portfolioValue: "$2.60",
+      change: "0.10%",
+      isPositive: false,
+      logo: <View style={[styles.stockIcon, { backgroundColor: "#059669" }]}><Text style={styles.stockIconText}>N</Text></View>
+    }
+  ];
+
+  const tradedStocks: TradedStock[] = [
+    {
+      id: "1",
+      symbol: "NVDA",
+      name: "NVIDIA Corp.",
+      price: "US$169.56",
+      change: "2.69%",
+      isPositive: false,
+      buyPercentage: 79,
+      sellPercentage: 21,
+      logo: <View style={[styles.stockIcon, { backgroundColor: "#059669" }]}><Text style={styles.stockIconText}>N</Text></View>
+    },
+    {
+      id: "2",
+      symbol: "AAPL", 
+      name: "Apple Inc.",
+      price: "US$236.78",
+      change: "2.00%",
+      isPositive: false,
+      buyPercentage: 72,
+      sellPercentage: 28,
+      logo: <View style={[styles.stockIcon, { backgroundColor: "#000" }]}><Text style={styles.stockIconText}>🍎</Text></View>
+    }
+  ];
+
+  const topGainers: Stock[] = [
+    { id: "1", symbol: "NVDA", change: "+8.76%", logo: <View style={[styles.stockIcon, { backgroundColor: "#059669" }]}><Text style={styles.stockIconText}>N</Text></View> },
+    { id: "2", symbol: "AAPL", change: "+5.32%", logo: <View style={[styles.stockIcon, { backgroundColor: "#000" }]}><Text style={styles.stockIconText}>🍎</Text></View> },
+    { id: "3", symbol: "TSLA", change: "+4.21%", logo: <View style={[styles.stockIcon, { backgroundColor: "#CC0000" }]}><Text style={styles.stockIconText}>T</Text></View> },
+    { id: "4", symbol: "MSFT", change: "+3.45%", logo: <View style={[styles.stockIcon, { backgroundColor: "#0078D4" }]}><Text style={styles.stockIconText}>M</Text></View> }
+  ];
+
+  const topLosers: Stock[] = [
+    { id: "1", symbol: "META", change: "-3.21%", logo: <View style={[styles.stockIcon, { backgroundColor: "#1877F2" }]}><Text style={styles.stockIconText}>F</Text></View> },
+    { id: "2", symbol: "GOOGL", change: "-2.87%", logo: <View style={[styles.stockIcon, { backgroundColor: "#4285F4" }]}><Text style={styles.stockIconText}>G</Text></View> },
+    { id: "3", symbol: "AMZN", change: "-2.43%", logo: <View style={[styles.stockIcon, { backgroundColor: "#FF9900" }]}><Text style={styles.stockIconText}>A</Text></View> },
+    { id: "4", symbol: "NFLX", change: "-1.98%", logo: <View style={[styles.stockIcon, { backgroundColor: "#E50914" }]}><Text style={styles.stockIconText}>N</Text></View> }
+  ];
+
+  const transactions: Transaction[] = [
+    {
+      id: "1",
+      action: "Bought",
+      symbol: "AAPL",
+      shares: "10",
+      price: "$150.00", 
+      timestamp: "2 minutes ago",
+      amount: "$1,500.00",
+      logo: <View style={[styles.stockIcon, { backgroundColor: "#000" }]}><Text style={styles.stockIconText}>🍎</Text></View>
+    },
+    {
+      id: "2",
+      action: "Sold",
+      symbol: "NVDA",
+      shares: "5", 
+      price: "$169.56",
+      timestamp: "1 hour ago",
+      amount: "$847.80",
+      logo: <View style={[styles.stockIcon, { backgroundColor: "#059669" }]}><Text style={styles.stockIconText}>N</Text></View>
+    }
+  ];
+
   return (
-    <SafeAreaView style={styles.container} edges={["top"]}>
-      <StatusBar barStyle="light-content" backgroundColor="#0f766e" />
-  <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+    <ThemeProvider>
+      <SafeAreaView style={styles.container} edges={["top"]}>
+        <StatusBar barStyle="light-content" backgroundColor="#0f766e" />
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
 
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.profileIcon}>
-            <Text style={styles.profileText}>TF</Text>
-          </View>
-          <View style={styles.searchContainer}>
-            <Search size={16} color="#9CA3AF" style={styles.searchIcon} />
-            <TextInput placeholder="Search" placeholderTextColor="#D1D5DB" style={styles.searchInput} />
-          </View>
-          <TouchableOpacity style={styles.headerButton}>
-            <BarChart2 size={16} color="#000" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.headerButton}>
-            <Globe size={16} color="#000" />
-          </TouchableOpacity>
-        </View>
-
-        {/* Portfolio Value */}
-        <View style={styles.portfolioSection}>
-          <Text style={styles.portfolioLabel}>Capital at risk</Text>
-          <View style={styles.portfolioValue}>
-            <Text style={styles.portfolioAmount}>$6</Text>
-            <Text style={styles.portfolioCents}>.74</Text>
-          </View>
-          <View style={styles.portfolioChange}>
-            <Text style={styles.changeText}>+$0.02</Text>
-            <Text style={styles.changeText}>▲ 0.23%</Text>
-          </View>
-        </View>
-
-        {/* Chart */}
-        <View style={styles.chartContainer}>
-          <Svg width="100%" height={80} viewBox="0 0 300 80">
-            <Path d="M 0 60 Q 75 50 150 45 T 300 20" stroke="white" strokeWidth="2" fill="none" />
-          </Svg>
-        </View>
-
-        {/* Action Buttons */}
-        <View style={styles.actionButtons}>
-          <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
-            <View style={styles.actionButtonIcon}>
-              <TrendingUp size={20} color="white" />
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.profileIcon}>
+              <Text style={styles.profileText}>TF</Text>
             </View>
-            <Text style={styles.actionButtonText}>Trade</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
-            <View style={styles.actionButtonIcon}>
-              <Plus size={20} color="white" />
+            <View style={styles.searchContainer}>
+              <Search size={16} color="#9CA3AF" style={styles.searchIcon} />
+              <TextInput placeholder="Search" placeholderTextColor="#D1D5DB" style={styles.searchInput} />
             </View>
-            <Text style={styles.actionButtonText}>Add money</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
-            <View style={styles.actionButtonIcon}>
-              <ArrowDown size={20} color="white" />
-            </View>
-            <Text style={styles.actionButtonText}>Withdraw</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
-            <View style={styles.actionButtonIcon}>
-              <MoreHorizontal size={20} color="white" />
-            </View>
-            <Text style={styles.actionButtonText}>More</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Stocks Section */}
-        <View style={styles.card}>
-          <View style={styles.cardHeader}>
-            <View style={styles.cardTitle}>
-              <TrendingUp size={16} color="white" />
-              <Text style={styles.cardTitleText}>Stocks</Text>
-            </View>
-            <ChevronUp size={16} color="white" />
-          </View>
-          <View style={styles.stockValue}>
-            <Text style={styles.stockValueText}>$6.74 ▲ 0.23%</Text>
+            <TouchableOpacity style={styles.headerButton}>
+              <BarChart2 size={16} color="#000" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.headerButton}>
+              <Globe size={16} color="#000" />
+            </TouchableOpacity>
           </View>
 
-          {/* Stock Items */}
-          <View style={styles.stockItems}>
-            <View style={styles.stockItem}>
-              <View style={styles.stockItemLeft}>
-                <View style={[styles.stockIcon, { backgroundColor: "#EC4899" }]}> 
-                  <View style={styles.stockIconDot} />
-                </View>
-                <View>
-                  <Text style={styles.stockName}>Taiwan Semiconductor</Text>
-                  <Text style={styles.stockDetails}>0.01 TSM • US$228.10</Text>
+          {/* Portfolio Value */}
+          <View style={styles.portfolioSection}>
+            <Text style={styles.portfolioLabel}>Capital at risk</Text>
+            <View style={styles.portfolioValue}>
+              <Text style={styles.portfolioAmount}>$6</Text>
+              <Text style={styles.portfolioCents}>.74</Text>
+            </View>
+            <View style={styles.portfolioChange}>
+              <Text style={styles.changeText}>+$0.02</Text>
+              <Text style={styles.changeText}>▲ 0.23%</Text>
+            </View>
+          </View>
+
+          {/* Chart */}
+          <View style={styles.chartContainer}>
+            <Svg width="100%" height={80} viewBox="0 0 300 80">
+              <Path d="M 0 60 Q 75 50 150 45 T 300 20" stroke="white" strokeWidth="2" fill="none" />
+            </Svg>
+          </View>
+
+          {/* Action Buttons */}
+          <View style={styles.actionButtons}>
+            <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
+              <View style={styles.actionButtonIcon}>
+                <TrendingUp size={20} color="white" />
+              </View>
+              <Text style={styles.actionButtonText}>Trade</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
+              <View style={styles.actionButtonIcon}>
+                <Plus size={20} color="white" />
+              </View>
+              <Text style={styles.actionButtonText}>Add money</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
+              <View style={styles.actionButtonIcon}>
+                <ArrowDown size={20} color="white" />
+              </View>
+              <Text style={styles.actionButtonText}>Withdraw</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
+              <View style={styles.actionButtonIcon}>
+                <MoreHorizontal size={20} color="white" />
+              </View>
+              <Text style={styles.actionButtonText}>More</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Stocks Section - Replaced with FinancialCard Widget */}
+          <View style={styles.widgetSection}>
+            <FinancialCard
+              icon={<TrendingUp size={20} color="white" />}
+              title="Stocks"
+              price="$6.74"
+              change="▲ 0.23%"
+              isPositive={true}
+              stocks={stockItems}
+            />
+          </View>
+
+          {/* Commodities Section */}
+          <View style={styles.card}>
+            <View style={styles.cardHeader}>
+              <View style={styles.cardTitle}>
+                <View style={styles.commodityIcon} />
+                <Text style={styles.cardTitleText}>Commodities</Text>
+              </View>
+              <Text style={styles.commodityValue}>$0</Text>
+            </View>
+          </View>
+
+          {/* Products Section - Replaced with ProductsWidget */}
+          <View style={styles.widgetSection}>
+            <ProductsWidget />
+          </View>
+
+          {/* Top Movers Widget - New Addition */}
+          <View style={styles.widgetSection}>
+            <TopMoversWidget topGainers={topGainers} topLosers={topLosers} />
+          </View>
+
+          {/* Most Traded Section - Replaced with MostTradedWidget */}
+          <View style={styles.widgetSection}>
+            <MostTradedWidget stocks={tradedStocks} />
+          </View>
+
+          {/* Transactions Widget - New Addition */}
+          <View style={styles.widgetSection}>
+            <TransactionsWidget transactions={transactions} />
+          </View>
+
+          {/* News Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>News</Text>
+              <ChevronRight size={16} color="#9CA3AF" />
+            </View>
+            <View style={styles.newsItems}>
+              <View style={styles.newsItem}>
+                <View style={styles.newsImage} />
+                <View style={styles.newsContent}>
+                  <Text style={styles.newsTitle}>Australia GDP Data Due On Wednesday</Text>
+                  <Text style={styles.newsTime}>Today, 08:17 • dpa AFX Com</Text>
                 </View>
               </View>
-              <View style={styles.stockItemRight}>
-                <Text style={styles.stockPrice}>$2.62</Text>
-                <Text style={styles.stockChangePositive}>▲ 0.76%</Text>
+              <View style={styles.newsItem}>
+                <View style={styles.newsImage} />
+                <View style={styles.newsContent}>
+                  <Text style={styles.newsTitle}>Eurozone Inflation Path Suggests ECB Unlikely To Cut Rates Further</Text>
+                  <Text style={styles.newsTime}>Today, 02:45 • dpa AFX Com</Text>
+                </View>
               </View>
             </View>
+            <TouchableOpacity style={styles.seeAllButton}>
+              <Text style={styles.seeAllText}>See all</Text>
+            </TouchableOpacity>
+          </View>
 
-            <View style={styles.stockItem}>
-              <View style={styles.stockItemLeft}>
+          {/* Corporate Events */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Corporate events</Text>
+              <ChevronRight size={16} color="#9CA3AF" />
+            </View>
+            <View style={styles.eventsItems}>
+              <View style={styles.eventItem}>
                 <View style={[styles.stockIcon, { backgroundColor: "#059669" }]}>
                   <Text style={styles.stockIconText}>N</Text>
                 </View>
                 <View>
                   <Text style={styles.stockName}>NVIDIA</Text>
-                  <Text style={styles.stockDetails}>0.01 NVDA • US$169.56</Text>
+                  <Text style={styles.stockDetails}>Ex-dividend • for October 11 September</Text>
                 </View>
               </View>
-              <View style={styles.stockItemRight}>
-                <Text style={styles.stockPrice}>$2.60</Text>
-                <Text style={styles.stockChangeNegative}>▼ 0.10%</Text>
-              </View>
-            </View>
-
-            <View style={styles.stockItem}>
-              <View style={styles.stockItemLeft}>
-                <View style={[styles.stockIcon, { backgroundColor: "#2563EB" }]}>
-                  <Text style={styles.stockIconText}>🇺🇸</Text>
+              <View style={styles.eventItem}>
+                <View style={[styles.stockIcon, { backgroundColor: "#EC4899" }]}>
+                  <View style={styles.stockIconDot} />
                 </View>
                 <View>
-                  <Text style={styles.stockName}>US Dollar</Text>
-                  <Text style={styles.stockDetails}>USD</Text>
+                  <Text style={styles.stockName}>Taiwan Semiconductor</Text>
+                  <Text style={styles.stockDetails}>Ex-dividend • for October 16 September</Text>
                 </View>
               </View>
-              <View style={styles.stockItemRight}>
-                <Text style={styles.stockPrice}>US$1</Text>
-              </View>
             </View>
-          </View>
-        </View>
-
-        {/* Commodities Section */}
-        <View style={styles.card}>
-          <View style={styles.cardHeader}>
-            <View style={styles.cardTitle}>
-              <View style={styles.commodityIcon} />
-              <Text style={styles.cardTitleText}>Commodities</Text>
-            </View>
-            <Text style={styles.commodityValue}>$0</Text>
-          </View>
-        </View>
-
-        {/* Products Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Products</Text>
-          <View style={styles.productsGrid}>
-            <TouchableOpacity style={styles.productItem}>
-              <View style={styles.productIcon}>
-                <TrendingUp size={20} color="white" />
-              </View>
-              <Text style={styles.productText}>Stocks</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.productItem}>
-              <View style={styles.productIcon}>
-                <View style={styles.etfIcon} />
-              </View>
-              <Text style={styles.productText}>ETFs</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.productItem}>
-              <View style={styles.productIcon}>
-                <View style={styles.commodityProductIcon} />
-              </View>
-              <Text style={styles.productText}>Commodities</Text>
+            <TouchableOpacity style={styles.seeAllButton}>
+              <Text style={styles.seeAllText}>See all</Text>
             </TouchableOpacity>
           </View>
-        </View>
 
-        {/* Most Traded Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Most traded this week</Text>
-            <ChevronRight size={16} color="#9CA3AF" />
+          {/* Add Widgets Button */}
+          <View style={styles.section}>
+            <TouchableOpacity style={styles.addWidgetsButton}>
+              <Plus size={16} color="white" />
+              <Text style={styles.addWidgetsText}>Add widgets</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.tradedItems}>
-            <View style={styles.tradedItem}>
-              <View style={styles.stockItemLeft}>
-                <View style={[styles.stockIcon, { backgroundColor: "#059669" }]}>
-                  <Text style={styles.stockIconText}>N</Text>
-                </View>
-                <View>
-                  <Text style={styles.stockName}>NVDA</Text>
-                  <Text style={styles.stockDetails}>79% Buys • 21% Sells</Text>
-                </View>
-              </View>
-              <View style={styles.stockItemRight}>
-                <Text style={styles.stockPrice}>US$169.56</Text>
-                <Text style={styles.stockChangeNegative}>▼ 2.69%</Text>
-              </View>
-            </View>
 
-            <View style={styles.tradedItem}>
-              <View style={styles.stockItemLeft}>
-                <View style={[styles.stockIcon, { backgroundColor: "#000" }]}>
-                  <Text style={styles.stockIconText}>🍎</Text>
-                </View>
-                <View>
-                  <Text style={styles.stockName}>AAPL</Text>
-                  <Text style={styles.stockDetails}>72% Buys • 28% Sells</Text>
-                </View>
-              </View>
-              <View style={styles.stockItemRight}>
-                <Text style={styles.stockPrice}>US$236.78</Text>
-                <Text style={styles.stockChangeNegative}>▼ 2.00%</Text>
-              </View>
-            </View>
+          {/* Footer Text */}
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>
+              Commodities trading services are provided by Revolut Payments Australia Pty Ltd. View Commodities
+              Disclosures.
+            </Text>
+            <Text style={styles.footerText}>Your capital is at risk. View Trading Disclosures.</Text>
           </View>
-          <TouchableOpacity style={styles.seeAllButton}>
-            <Text style={styles.seeAllText}>See all</Text>
-          </TouchableOpacity>
-        </View>
 
-        {/* News Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>News</Text>
-            <ChevronRight size={16} color="#9CA3AF" />
-          </View>
-          <View style={styles.newsItems}>
-            <View style={styles.newsItem}>
-              <View style={styles.newsImage} />
-              <View style={styles.newsContent}>
-                <Text style={styles.newsTitle}>Australia GDP Data Due On Wednesday</Text>
-                <Text style={styles.newsTime}>Today, 08:17 • dpa AFX Com</Text>
-              </View>
-            </View>
-            <View style={styles.newsItem}>
-              <View style={styles.newsImage} />
-              <View style={styles.newsContent}>
-                <Text style={styles.newsTitle}>Eurozone Inflation Path Suggests ECB Unlikely To Cut Rates Further</Text>
-                <Text style={styles.newsTime}>Today, 02:45 • dpa AFX Com</Text>
-              </View>
-            </View>
-          </View>
-          <TouchableOpacity style={styles.seeAllButton}>
-            <Text style={styles.seeAllText}>See all</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Corporate Events */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Corporate events</Text>
-            <ChevronRight size={16} color="#9CA3AF" />
-          </View>
-          <View style={styles.eventsItems}>
-            <View style={styles.eventItem}>
-              <View style={[styles.stockIcon, { backgroundColor: "#059669" }]}>
-                <Text style={styles.stockIconText}>N</Text>
-              </View>
-              <View>
-                <Text style={styles.stockName}>NVIDIA</Text>
-                <Text style={styles.stockDetails}>Ex-dividend • for October 11 September</Text>
-              </View>
-            </View>
-            <View style={styles.eventItem}>
-              <View style={[styles.stockIcon, { backgroundColor: "#EC4899" }]}>
-                <View style={styles.stockIconDot} />
-              </View>
-              <View>
-                <Text style={styles.stockName}>Taiwan Semiconductor</Text>
-                <Text style={styles.stockDetails}>Ex-dividend • for October 16 September</Text>
-              </View>
-            </View>
-          </View>
-          <TouchableOpacity style={styles.seeAllButton}>
-            <Text style={styles.seeAllText}>See all</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Add Widgets Button */}
-        <View style={styles.section}>
-          <TouchableOpacity style={styles.addWidgetsButton}>
-            <Plus size={16} color="white" />
-            <Text style={styles.addWidgetsText}>Add widgets</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Footer Text */}
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Commodities trading services are provided by Revolut Payments Australia Pty Ltd. View Commodities
-            Disclosures.
-          </Text>
-          <Text style={styles.footerText}>Your capital is at risk. View Trading Disclosures.</Text>
-        </View>
-
-        {/* Bottom padding for tab bar */}
-        <View style={{ height: 100 }} />
-      </ScrollView>
-    </SafeAreaView>
+          {/* Bottom padding for tab bar */}
+          <View style={{ height: 100 }} />
+        </ScrollView>
+      </SafeAreaView>
+    </ThemeProvider>
   );
 }
 
@@ -550,6 +552,10 @@ const styles = StyleSheet.create({
   section: {
     paddingHorizontal: 16,
     marginBottom: 24,
+  },
+  widgetSection: {
+    paddingHorizontal: 16,
+    marginBottom: 16,
   },
   sectionHeader: {
     flexDirection: "row",
