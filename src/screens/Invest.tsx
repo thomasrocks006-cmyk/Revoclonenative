@@ -3,21 +3,23 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Status
 import Svg, { Path } from "react-native-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Search, TrendingUp, Plus, ArrowDown, MoreHorizontal, ChevronUp, ChevronRight, BarChart2, Globe } from "lucide-react-native";
-import { 
+import {
   FinancialCard,
-  MostTradedWidget, 
-  ProductsWidget, 
-  TopMoversWidget, 
+  MostTradedWidget,
+  ProductsWidget,
+  TopMoversWidget,
   TransactionsWidget,
   ThemeProvider,
   type StockItem,
   type TradedStock,
   type Stock,
-  type Transaction 
+  type Transaction
 } from '../components/widgets';
+import { usePortfolio } from "../store/portfolio";
 
 export default function Invest() {
   const { width } = Dimensions.get("window");
+  const { invest } = usePortfolio();
 
   // Sample data for widgets
   const stockItems: StockItem[] = [
@@ -107,6 +109,8 @@ export default function Invest() {
     }
   ];
 
+  const [whole, cents] = invest.toFixed(2).split(".");
+
   return (
     <ThemeProvider>
       <SafeAreaView style={styles.container} edges={["top"]}>
@@ -134,12 +138,12 @@ export default function Invest() {
           <View style={styles.portfolioSection}>
             <Text style={styles.portfolioLabel}>Capital at risk</Text>
             <View style={styles.portfolioValue}>
-              <Text style={styles.portfolioAmount}>$6</Text>
-              <Text style={styles.portfolioCents}>.74</Text>
+              <Text style={styles.portfolioAmount}>${whole}</Text>
+              <Text style={styles.portfolioCents}>.{cents}</Text>
             </View>
             <View style={styles.portfolioChange}>
-              <Text style={styles.changeText}>+$0.02</Text>
-              <Text style={styles.changeText}>▲ 0.23%</Text>
+              <Text style={styles.changeText}>+$0.00</Text>
+              <Text style={styles.changeText}>▲ 0.00%</Text>
             </View>
           </View>
 
@@ -183,7 +187,7 @@ export default function Invest() {
             <FinancialCard
               icon={<TrendingUp size={20} color="white" />}
               title="Stocks"
-              price="$6.74"
+              price={`$${invest.toFixed(2)}`}
               change="▲ 0.23%"
               isPositive={true}
               stocks={stockItems}

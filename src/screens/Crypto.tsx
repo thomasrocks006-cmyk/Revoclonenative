@@ -13,10 +13,12 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Path } from "react-native-svg";
 import { Search, BarChart2, Globe } from "lucide-react-native";
+import { usePortfolio } from "../store/portfolio";
 
 const { width } = Dimensions.get("window");
 
 export default function Crypto() {
+  const { crypto } = usePortfolio();
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={["#9333ea", "#2563eb", "#1e40af"]} style={styles.gradient}>
@@ -40,8 +42,8 @@ export default function Crypto() {
 
           {/* Balance Section */}
           <View style={styles.balanceSection}>
-            <Text style={styles.balanceAmount}>$5.85</Text>
-            <Text style={styles.balanceChange}>+$1.13 • +24.17%</Text>
+            <Text style={styles.balanceAmount}>${crypto.toFixed(2)}</Text>
+            <Text style={styles.balanceChange}>+0.00 • 0%</Text>
           </View>
 // ...existing code...
 
