@@ -13,10 +13,13 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Path } from "react-native-svg";
 import { Search, BarChart2, Globe } from "lucide-react-native";
+import { usePortfolio } from "../store/portfolio";
 
 const { width } = Dimensions.get("window");
 
 export default function Crypto() {
+  const balance = usePortfolio((s) => s.crypto);
+  const tradeCrypto = usePortfolio((s) => s.tradeCrypto);
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={["#9333ea", "#2563eb", "#1e40af"]} style={styles.gradient}>
@@ -40,7 +43,7 @@ export default function Crypto() {
 
           {/* Balance Section */}
           <View style={styles.balanceSection}>
-            <Text style={styles.balanceAmount}>$5.85</Text>
+            <Text style={styles.balanceAmount}>${balance.toFixed(2)}</Text>
             <Text style={styles.balanceChange}>+$1.13 • +24.17%</Text>
           </View>
 // ...existing code...
@@ -55,7 +58,7 @@ export default function Crypto() {
           {/* Action Buttons */}
           <View style={styles.actionButtons}>
             <View style={styles.actionButton}>
-              <TouchableOpacity style={styles.actionButtonCircle}>
+              <TouchableOpacity style={styles.actionButtonCircle} onPress={() => tradeCrypto(1)}>
                 <Text style={styles.actionButtonIcon}>📈</Text>
               </TouchableOpacity>
               <Text style={styles.actionButtonText}>Trade</Text>
