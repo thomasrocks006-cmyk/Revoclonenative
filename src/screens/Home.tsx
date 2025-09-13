@@ -1,6 +1,6 @@
 // Home screen (clean)
 import React, { useMemo } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, TextInput } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, TextInput, Alert } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { Search, BarChart3, BarChart2, Globe, Plus, ArrowUpDown, MoreHorizontal, ChevronRight } from "lucide-react-native";
@@ -52,6 +52,32 @@ export default function Home() {
     { id: "disposable", label: "Disposable", secondary: "Generate", gradientKey: "disposable", showMastercard: true },
     { id: "get-card", label: "Get card", gradientKey: "teal" },
   ];
+  const quickActions = [
+    {
+      key: "add",
+      label: "Add money",
+      icon: <Plus size={20} color="#fff" />,
+      onPress: () => Alert.alert("Add money", "Deposit flow coming soon"),
+    },
+    {
+      key: "payid",
+      label: "PayID",
+      icon: <Text style={styles.payId}>iD</Text>,
+      onPress: () => navigation.navigate("Payments"),
+    },
+    {
+      key: "move",
+      label: "Move",
+      icon: <ArrowUpDown size={20} color="#fff" />,
+      onPress: () => Alert.alert("Move", "Move money feature coming soon"),
+    },
+    {
+      key: "more",
+      label: "More",
+      icon: <MoreHorizontal size={20} color="#fff" />,
+      onPress: () => Alert.alert("More", "More actions coming soon"),
+    },
+  ];
 
   return (
     <SafeAreaView style={styles.safe} edges={[]}> {/* we manually offset content */}
@@ -92,17 +118,12 @@ export default function Home() {
             </View>
           </View>
           {/* Quick actions */}
-          <View style={[styles.quickRow, { marginTop: 24 }]}>
-            {[
-              { key: "add", label: "Add money", icon: <Plus size={20} color="#fff" /> },
-              { key: "payid", label: "PayID", icon: <Text style={styles.payId}>iD</Text> },
-              { key: "move", label: "Move", icon: <ArrowUpDown size={20} color="#fff" /> },
-              { key: "more", label: "More", icon: <MoreHorizontal size={20} color="#fff" /> },
-            ].map(a => (
-              <View key={a.key} style={styles.quickItem}>
+          <View style={[styles.quickRow, { marginTop: 24 }]}> 
+            {quickActions.map(a => (
+              <TouchableOpacity key={a.key} style={styles.quickItem} onPress={a.onPress}>
                 <View style={styles.quickCircle}>{a.icon}</View>
                 <Text style={styles.quickLabel}>{a.label}</Text>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
 
