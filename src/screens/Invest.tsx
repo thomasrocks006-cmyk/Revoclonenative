@@ -15,12 +15,12 @@ import {
   type Stock,
   type Transaction
 } from '../components/widgets';
-import { usePortfolio } from "../store/portfolio";
+import { usePortfolio, usePortfolioActions } from "../store/portfolio";
 
 export default function Invest() {
   const { width } = Dimensions.get("window");
   const investBalance = usePortfolio((s) => s.invest);
-  const changeInvest = usePortfolio((s) => s.changeInvest);
+  const { changeInvest } = usePortfolioActions();
   const [dollars, cents] = investBalance.toFixed(2).split(".");
 
   // Sample data for widgets

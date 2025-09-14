@@ -13,13 +13,13 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Path } from "react-native-svg";
 import { Search, BarChart2, Globe } from "lucide-react-native";
-import { usePortfolio } from "../store/portfolio";
+import { usePortfolio, usePortfolioActions } from "../store/portfolio";
 
 const { width } = Dimensions.get("window");
 
 export default function Crypto() {
   const balance = usePortfolio((s) => s.crypto);
-  const tradeCrypto = usePortfolio((s) => s.tradeCrypto);
+  const { tradeCrypto } = usePortfolioActions();
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={["#9333ea", "#2563eb", "#1e40af"]} style={styles.gradient}>

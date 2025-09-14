@@ -20,7 +20,7 @@ export type Portfolio = PortfolioState;
 const initialState: PortfolioState = {
   cash: 2.19,
   crypto: 2.1,
-  invest: 0,
+  invest: 6.74,
 };
 
 export const usePortfolioStore = create<PortfolioState & PortfolioActions>((set) => ({
