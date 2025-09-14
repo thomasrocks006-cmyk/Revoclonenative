@@ -25,8 +25,14 @@ const usePortfolioStore = create<PortfolioState & PortfolioActions>((set) => ({
   ...initialState,
   addCash: (amount) => set((state) => ({ cash: state.cash + amount })),
   withdrawCash: (amount) => set((state) => ({ cash: state.cash - amount })),
-  tradeCrypto: (delta) => set((state) => ({ crypto: state.crypto + delta })),
-  changeInvest: (delta) => set((state) => ({ invest: state.invest + delta })),
+  tradeCrypto: (delta) => set((state) => {
+    const newCrypto = state.crypto + delta;
+    return newCrypto >= 0 ? { crypto: newCrypto } : {};
+  }),
+  changeInvest: (delta) => set((state) => {
+    const newInvest = state.invest + delta;
+    return newInvest >= 0 ? { invest: newInvest } : {};
+  }),
 }));
 
 // Context wrapper so components can access via provider if needed
