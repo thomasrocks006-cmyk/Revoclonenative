@@ -24,7 +24,11 @@ const initialState: PortfolioState = {
 const usePortfolioStore = create<PortfolioState & PortfolioActions>((set) => ({
   ...initialState,
   addCash: (amount) => set((state) => ({ cash: state.cash + amount })),
-  withdrawCash: (amount) => set((state) => ({ cash: state.cash - amount })),
+  withdrawCash: (amount) => set((state) => (
+    state.cash >= amount
+      ? { cash: state.cash - amount }
+      : { cash: state.cash }
+  )),
   tradeCrypto: (delta) => set((state) => {
     const newCrypto = state.crypto + delta;
     return newCrypto >= 0 ? { crypto: newCrypto } : {};
