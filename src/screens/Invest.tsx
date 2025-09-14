@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, StatusBar, Dimensions } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path } from "react-native-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Search, TrendingUp, Plus, ArrowDown, MoreHorizontal, ChevronUp, ChevronRight, BarChart2, Globe } from "lucide-react-native";
@@ -109,9 +110,18 @@ export default function Invest() {
 
   return (
     <ThemeProvider>
-      <SafeAreaView style={styles.container} edges={["top"]}>
-        <StatusBar barStyle="light-content" backgroundColor="#0f766e" />
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <View style={styles.root}>
+        <LinearGradient
+          colors={["#09382c", "#0d5c4a", "#0f766e", "#062019", "#01110a"]}
+          locations={[0, 0.25, 0.45, 0.65, 1]}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+          style={styles.gradient}
+          pointerEvents="none"
+        />
+        <SafeAreaView style={styles.container} edges={["top"]}>
+          <StatusBar barStyle="light-content" backgroundColor="#09382c" />
+          <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
 
           {/* Header */}
           <View style={styles.header}>
@@ -190,15 +200,16 @@ export default function Invest() {
             />
           </View>
 
-          {/* Commodities Section */}
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <View style={styles.cardTitle}>
-                <View style={styles.commodityIcon} />
-                <Text style={styles.cardTitleText}>Commodities</Text>
-              </View>
-              <Text style={styles.commodityValue}>$0</Text>
-            </View>
+          {/* Commodities Section - Now matches FinancialCard UI */}
+          <View style={styles.widgetSection}>
+            <FinancialCard
+              icon={<BarChart2 size={20} color="white" />}
+              title="Commodities"
+              price="$0.00"
+              change="0.00%"
+              isPositive={true}
+              stocks={[]}
+            />
           </View>
 
           {/* Products Section - Replaced with ProductsWidget */}
@@ -298,16 +309,19 @@ export default function Invest() {
 
           {/* Bottom padding for tab bar */}
           <View style={{ height: 100 }} />
-        </ScrollView>
-      </SafeAreaView>
+          </ScrollView>
+        </SafeAreaView>
+      </View>
     </ThemeProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  root: { flex: 1, backgroundColor: "#01110a" },
+  gradient: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
   container: {
     flex: 1,
-    backgroundColor: "#0f766e",
+    backgroundColor: "transparent",
   },
   scrollView: {
     flex: 1,
@@ -451,13 +465,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   card: {
-    backgroundColor: "rgba(15, 118, 110, 0.5)",
-    marginHorizontal: 16,
-    marginBottom: 16,
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: "#0f766e",
+  backgroundColor: "rgba(15, 118, 110, 0.5)",
+  marginHorizontal: 16,
+  marginBottom: 16,
+  borderRadius: 12,
+  padding: 16,
+  // borderWidth: 1,
+  // borderColor: "#0f766e",
   },
   cardHeader: {
     flexDirection: "row",

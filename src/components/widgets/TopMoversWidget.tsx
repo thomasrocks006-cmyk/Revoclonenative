@@ -20,11 +20,12 @@ export function TopMoversWidget({ topGainers, topLosers }: TopMoversWidgetProps)
 
   return (
     <View style={styles.container}>
+      <View style={styles.sheen} pointerEvents="none" />
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Today's top movers</Text>
         <View style={styles.chevronRight}>
-          <Text style={styles.chevronText}>›</Text>
+          <Text style={styles.chevronText}>{">"}</Text>
         </View>
       </View>
 
@@ -98,15 +99,34 @@ export function TopMoversWidget({ topGainers, topLosers }: TopMoversWidgetProps)
           </View>
         ))}
       </View>
-    </View>
+  </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#1e293b', // slate-800
+  backgroundColor: 'transparent',
+  borderRadius: 24,
+  padding: 24,
+  borderWidth: 1,
+  borderColor: 'rgba(255,255,255,0.25)',
+    overflow: 'hidden',
+  },
+  sheen: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     borderRadius: 24,
-    padding: 24,
+    opacity: 0.35,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    // web-only diagonal gradient sheen
+    // @ts-ignore
+    ...(typeof document !== 'undefined' ? {
+      // @ts-ignore
+      background: 'linear-gradient(120deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.1) 60%)'
+    } : {}),
   },
   header: {
     flexDirection: 'row',

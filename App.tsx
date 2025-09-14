@@ -4,6 +4,7 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Home from "./src/screens/Home";
+import ApplePayAddMoney from "./src/screens/ApplePayAddMoney";
 import Invest from "./src/screens/Invest";
 import Payments from "./src/screens/Payments";
 import Crypto from "./src/screens/Crypto";
@@ -14,6 +15,7 @@ import { useColorScheme } from "react-native";
 export type RootStackParamList = {
   Tabs: undefined;
   Transactions: undefined;
+  ApplePayAddMoney: undefined;
 };
 
 type RootTabParamList = {
@@ -80,6 +82,7 @@ export default function App() {
         <Stack.Navigator initialRouteName="Tabs" screenOptions={{ headerShown: false, animation: "fade" }}>
           <Stack.Screen name="Tabs" component={Tabs} />
           <Stack.Screen name="Transactions" component={Transactions} />
+          <Stack.Screen name="ApplePayAddMoney" component={ApplePayAddMoney} />
         </Stack.Navigator>
       </NavigationContainer>
     </QueryClientProvider>

@@ -22,6 +22,7 @@ export function ProductsWidget() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.sheen} pointerEvents="none" />
       <Text style={styles.headerText}>Products</Text>
 
       <View style={styles.productsGrid}>
@@ -44,9 +45,28 @@ export function ProductsWidget() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#1e293b', // slate-800
+  backgroundColor: 'transparent',
+  borderRadius: 24,
+  padding: 24,
+  borderWidth: 1,
+  borderColor: 'rgba(255,255,255,0.25)',
+    overflow: 'hidden',
+  },
+  sheen: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     borderRadius: 24,
-    padding: 24,
+    opacity: 0.35,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    // web-only diagonal gradient sheen
+    // @ts-ignore
+    ...(typeof document !== 'undefined' ? {
+      // @ts-ignore
+      background: 'linear-gradient(120deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.1) 60%)'
+    } : {}),
   },
   headerText: {
     color: '#94a3b8', // slate-400
@@ -60,12 +80,14 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   productButton: {
-    flex: 1,
-    backgroundColor: '#334155', // slate-700
-    borderRadius: 16,
-    padding: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+  flex: 1,
+  backgroundColor: 'rgba(255,255,255,0.06)',
+  borderRadius: 16,
+  padding: 16,
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderWidth: 1,
+  borderColor: 'rgba(255,255,255,0.18)'
   },
   productContent: {
     alignItems: 'center',

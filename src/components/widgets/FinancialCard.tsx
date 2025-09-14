@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 
 export interface StockItem {
   id: string;
@@ -27,6 +27,8 @@ export function FinancialCard({ icon, title, price, change, isPositive, stocks }
 
   return (
     <View style={styles.container}>
+      {/* Glassy sheen overlay */}
+      <View style={styles.sheen} pointerEvents="none" />
       <TouchableOpacity
         style={styles.header}
         onPress={() => setIsExpanded(!isExpanded)}
@@ -45,7 +47,7 @@ export function FinancialCard({ icon, title, price, change, isPositive, stocks }
               <Text style={styles.priceText}>{price}</Text>
               <View style={styles.changeRow}>
                 <Text style={styles.trendIcon}>
-                  {isPositive ? "↗" : "↘"}
+                  {isPositive ? "▲" : "▼"}
                 </Text>
                 <Text style={[
                   styles.changeText,
@@ -59,7 +61,7 @@ export function FinancialCard({ icon, title, price, change, isPositive, stocks }
         </View>
 
         <View style={[styles.chevronDown, isExpanded && styles.chevronExpanded]}>
-          <Text style={styles.chevronText}>⌄</Text>
+          <Text style={styles.chevronText}>▼</Text>
         </View>
       </TouchableOpacity>
 
@@ -89,7 +91,7 @@ export function FinancialCard({ icon, title, price, change, isPositive, stocks }
                   <Text style={styles.stockPortfolioValue}>{stock.portfolioValue}</Text>
                   <View style={styles.stockChangeRow}>
                     <Text style={styles.stockTrendIcon}>
-                      {stock.isPositive ? "↗" : "↘"}
+                      {stock.isPositive ? "▲" : "▼"}
                     </Text>
                     <Text style={[
                       styles.stockChangeText,
@@ -110,9 +112,27 @@ export function FinancialCard({ icon, title, price, change, isPositive, stocks }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#1e293b', // slate-800
+    backgroundColor: 'transparent',
     borderRadius: 16,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.25)',
+    // Glassy blur effect for iOS/Android
+    ...(Platform.OS === 'ios' || Platform.OS === 'android' ? { backdropFilter: 'blur(12px)' } : {}),
+  },
+  sheen: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: 16,
+    opacity: 0.35,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    // Diagonal gradient effect (web only)
+    ...(Platform.OS === 'web' ? {
+      background: 'linear-gradient(120deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.1) 60%)'
+    } : {}),
   },
   header: {
     padding: 24,
@@ -138,7 +158,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   titleText: {
-    color: '#ffffff',
+    color: 'rgba(255,255,255,0.7)',
     fontSize: 20,
     fontWeight: '500',
     marginBottom: 4,

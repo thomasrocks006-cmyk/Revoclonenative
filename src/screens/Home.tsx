@@ -56,13 +56,12 @@ export default function Home() {
   return (
     <SafeAreaView style={styles.safe} edges={[]}> {/* we manually offset content */}
       <View style={styles.root}>
-        {/* Background gradient extending behind status bar */}
         <LinearGradient
           colors={["#1e40af", "#0a2269", "#03103f", "#01041c", "rgba(0,0,0,0.85)", "rgba(0,0,0,0.85)"]}
           locations={[0, 0.4, 0.64, 0.84, 0.96, 1]}
-          style={[StyleSheet.absoluteFill, { height: 580 + insets.top }]}
+          style={styles.fixedGradient}
+          pointerEvents="none"
         />
-        
         <ScrollView style={styles.content} contentContainerStyle={{ paddingBottom: 96 }} showsVerticalScrollIndicator={false}>
           {/* Header / Balance area - now inside ScrollView */}
           <View style={[styles.header, { paddingTop: insets.top, marginTop: 0 }]}>
@@ -85,8 +84,10 @@ export default function Home() {
             <View style={styles.centerStack}>
               <Text style={styles.accountType}>Personal · AUD</Text>
               <View style={styles.balanceRow}>
-                <Text style={styles.balanceWhole}>{whole}</Text>
-                <Text style={styles.balanceCents}>.{cents}</Text>
+                <View style={styles.balanceAmountContainer}>
+                  <Text style={styles.balanceWhole}>{whole}</Text>
+                  <Text style={styles.balanceCents}>.{cents}</Text>
+                </View>
               </View>
               <Button label="Accounts" style={styles.accountsBtn} />
             </View>
@@ -94,13 +95,15 @@ export default function Home() {
           {/* Quick actions */}
           <View style={[styles.quickRow, { marginTop: 24 }]}>
             {[
-              { key: "add", label: "Add money", icon: <Plus size={20} color="#fff" /> },
+              { key: "add", label: "Add money", icon: <Plus size={20} color="#fff" />, onPress: () => navigation.navigate("ApplePayAddMoney") },
               { key: "payid", label: "PayID", icon: <Text style={styles.payId}>iD</Text> },
               { key: "move", label: "Move", icon: <ArrowUpDown size={20} color="#fff" /> },
               { key: "more", label: "More", icon: <MoreHorizontal size={20} color="#fff" /> },
             ].map(a => (
               <View key={a.key} style={styles.quickItem}>
-                <View style={styles.quickCircle}>{a.icon}</View>
+                <TouchableOpacity style={styles.quickCircle} onPress={a.onPress}>
+                  {a.icon}
+                </TouchableOpacity>
                 <Text style={styles.quickLabel}>{a.label}</Text>
               </View>
             ))}
@@ -268,8 +271,9 @@ function WatchRow({ dot, label, sub, price, pct }: { dot: "bg" | "flag"; label: 
 
 // Styles
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#0B0D18" },
-  root: { flex: 1, backgroundColor: "#0B0D18" },
+  safe: { flex: 1, backgroundColor: "#01041c" },
+  root: { flex: 1 },
+  fixedGradient: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
   header: { position: "relative", minHeight: 580 },
   // Invest-like header styles for unified look
   headerRow: { flexDirection: "row", alignItems: "center", paddingHorizontal: 16, paddingVertical: 12, gap: 12 },
@@ -281,9 +285,10 @@ const styles = StyleSheet.create({
   headerButton: { width: 32, height: 32, borderRadius: 16, backgroundColor: "rgba(255, 255, 255, 0.45)", justifyContent: "center", alignItems: "center" },
   centerStack: { alignItems: "center", paddingTop: 48 },
   accountType: { color: "rgba(255,255,255,0.65)", fontSize: 12, marginTop: 32, marginBottom: 6 },
-  balanceRow: { flexDirection: "row", alignItems: "flex-start" },
-  balanceWhole: { color: "#fff", fontSize: 40, lineHeight: 40, marginTop: 10, marginRight: 2 },
-  balanceCents: { color: "#fff", fontSize: 22, lineHeight: 22, marginTop: 10 },
+  balanceRow: { flexDirection: "row", justifyContent: "center", alignItems: "center" },
+  balanceAmountContainer: { flexDirection: "row", alignItems: "flex-end", justifyContent: "center" },
+  balanceWhole: { color: "#fff", fontSize: 40, lineHeight: 40 },
+  balanceCents: { color: "#fff", fontSize: 22, lineHeight: 40, alignSelf: "flex-end" },
   accountsBtn: { marginTop: 19, height: 38, width: 85, borderRadius: 999, backgroundColor: "rgba(88,100,165,0.6)", borderWidth: 1, borderColor: "rgba(255,255,255,0.15)" },
   content: { paddingHorizontal: 8 },
   quickRow: { flexDirection: "row", justifyContent: "space-between", gap: 8 },
