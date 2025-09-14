@@ -1,6 +1,6 @@
 // Home screen (clean)
 import React, { useMemo } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, TextInput } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, TextInput, Alert } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { Search, BarChart3, BarChart2, Globe, Plus, ArrowUpDown, MoreHorizontal, ChevronRight } from "lucide-react-native";
@@ -8,6 +8,7 @@ import { Svg, Defs, LinearGradient as SvgLinearGradient, Stop, Path } from "reac
 import { useNavigation } from "@react-navigation/native"; 
 import Button from "../components/ui/Button";
 import RevolutCardsWidget, { CardData } from "../components/RevolutCardsWidget";
+import { usePortfolio } from "../store/portfolio";
 
 // Types
 type User = { id: string; firstName: string; lastName: string };
@@ -45,12 +46,40 @@ export default function Home() {
     { id: "t2", merchant: "Thomas Francis", createdAt: new Date(Date.now() - 2 * 86400000).toISOString(), status: "Sent from Revolut", amount: -18 },
   ];
   const recentTransactions = useMemo(() => transactions.slice(0, 2), [transactions]);
+  const { cash, crypto, invest } = usePortfolio();
+  const totalWealth = cash + crypto + invest;
   const balance = 2.19;
   const [whole, cents] = balance.toFixed(2).split(".");
   const cards: CardData[] = [
     { id: "original", label: "Original", secondary: "··4103", gradientKey: "original", showAlertDot: true, showMastercard: true, ring: true },
     { id: "disposable", label: "Disposable", secondary: "Generate", gradientKey: "disposable", showMastercard: true },
     { id: "get-card", label: "Get card", gradientKey: "teal" },
+  ];
+  const quickActions = [
+    {
+      key: "add",
+      label: "Add money",
+      icon: <Plus size={20} color="#fff" />,
+      onPress: () => Alert.alert("Add money", "Deposit flow coming soon"),
+    },
+    {
+      key: "payid",
+      label: "PayID",
+      icon: <Text style={styles.payId}>iD</Text>,
+      onPress: () => navigation.navigate("Payments"),
+    },
+    {
+      key: "move",
+      label: "Move",
+      icon: <ArrowUpDown size={20} color="#fff" />,
+      onPress: () => Alert.alert("Move", "Move money feature coming soon"),
+    },
+    {
+      key: "more",
+      label: "More",
+      icon: <MoreHorizontal size={20} color="#fff" />,
+      onPress: () => Alert.alert("More", "More actions coming soon"),
+    },
   ];
 
   return (
@@ -92,17 +121,12 @@ export default function Home() {
             </View>
           </View>
           {/* Quick actions */}
-          <View style={[styles.quickRow, { marginTop: 24 }]}>
-            {[
-              { key: "add", label: "Add money", icon: <Plus size={20} color="#fff" /> },
-              { key: "payid", label: "PayID", icon: <Text style={styles.payId}>iD</Text> },
-              { key: "move", label: "Move", icon: <ArrowUpDown size={20} color="#fff" /> },
-              { key: "more", label: "More", icon: <MoreHorizontal size={20} color="#fff" /> },
-            ].map(a => (
-              <View key={a.key} style={styles.quickItem}>
+          <View style={[styles.quickRow, { marginTop: 24 }]}> 
+            {quickActions.map(a => (
+              <TouchableOpacity key={a.key} style={styles.quickItem} onPress={a.onPress}>
                 <View style={styles.quickCircle}>{a.icon}</View>
                 <Text style={styles.quickLabel}>{a.label}</Text>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
 
@@ -159,12 +183,12 @@ export default function Home() {
             <ChevronRight size={16} color="rgba(255,255,255,0.55)" />
           </View>
           <View style={styles.card}>
-            <Text style={styles.bigNumber}>{formatAUD(4.29)}</Text>
+            <Text style={styles.bigNumber}>{formatAUD(totalWealth)}</Text>
             <View style={{ marginTop: 16, gap: 16 }}>
-              <Row iconBg="#6C8CFF" left="Cash" right={formatAUD(2.19)} />
-              <Row iconBg="#A070FF" left="Crypto" right={formatAUD(2.10)} iconText="₿" />
+              <Row iconBg="#6C8CFF" left="Cash" right={formatAUD(cash)} />
+              <Row iconBg="#A070FF" left="Crypto" right={formatAUD(crypto)} iconText="₿" />
               <RowChevron iconBg="#D8E958" title="Loan" subtitle="Get a low-rate loan up to $50,000" />
-              <RowChevron iconBg="#56B4FF" title="Invest" subtitle="Invest for as little as $1" icon={<BarChart3 size={16} color="#fff" />} />
+              <Row iconBg="#56B4FF" left="Invest" right={formatAUD(invest)} icon={<BarChart3 size={16} color="#fff" />} />
             </View>
           </View>
 
@@ -217,12 +241,12 @@ export default function Home() {
 }
 
 // Small row components
-function Row({ iconBg, left, right, iconText }: { iconBg: string; left: string; right: string; iconText?: string }) {
+function Row({ iconBg, left, right, iconText, icon }: { iconBg: string; left: string; right: string; iconText?: string; icon?: React.ReactNode }) {
   return (
     <View style={styles.row}>
       <View style={styles.rowLeft}>
         <View style={[styles.rowIcon, { backgroundColor: iconBg }]}>
-          <Text style={styles.rowIconText}>{iconText ?? "$"}</Text>
+          {icon ? icon : <Text style={styles.rowIconText}>{iconText ?? "$"}</Text>}
         </View>
         <Text style={styles.rowLeftText}>{left}</Text>
       </View>

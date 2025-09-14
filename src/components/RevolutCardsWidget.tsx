@@ -13,17 +13,19 @@ export type CardData = {
 };
 
 const { width } = Dimensions.get("window");
-const CARD_W = width * 0.86;
-const CARD_H = 180;
+const PADDING = 8;
+const GAP = 12;
+const CARD_W = (width - PADDING * 2 - GAP * 2) / 3;
+const CARD_H = CARD_W * 0.8;
 
 export default function RevolutCardsWidget({ cards }: { cards: CardData[] }) {
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ paddingHorizontal: 8, gap: 12 }}
+      contentContainerStyle={{ paddingHorizontal: PADDING, gap: GAP }}
       snapToAlignment="start"
-      snapToInterval={CARD_W + 12}
+      snapToInterval={CARD_W + GAP}
       decelerationRate="fast"
     >
       {cards.map((c) => {
