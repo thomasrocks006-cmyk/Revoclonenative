@@ -3,21 +3,25 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Status
 import Svg, { Path } from "react-native-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Search, TrendingUp, Plus, ArrowDown, MoreHorizontal, ChevronUp, ChevronRight, BarChart2, Globe } from "lucide-react-native";
-import { 
+import {
   FinancialCard,
-  MostTradedWidget, 
-  ProductsWidget, 
-  TopMoversWidget, 
+  MostTradedWidget,
+  ProductsWidget,
+  TopMoversWidget,
   TransactionsWidget,
   ThemeProvider,
   type StockItem,
   type TradedStock,
   type Stock,
-  type Transaction 
+  type Transaction
 } from '../components/widgets';
+import { usePortfolio } from "../store/portfolio";
 
 export default function Invest() {
   const { width } = Dimensions.get("window");
+  const investBalance = usePortfolio((s) => s.invest);
+  const changeInvest = usePortfolio((s) => s.changeInvest);
+  const [dollars, cents] = investBalance.toFixed(2).split(".");
 
   // Sample data for widgets
   const stockItems: StockItem[] = [
@@ -134,8 +138,8 @@ export default function Invest() {
           <View style={styles.portfolioSection}>
             <Text style={styles.portfolioLabel}>Capital at risk</Text>
             <View style={styles.portfolioValue}>
-              <Text style={styles.portfolioAmount}>$6</Text>
-              <Text style={styles.portfolioCents}>.74</Text>
+              <Text style={styles.portfolioAmount}>${dollars}</Text>
+              <Text style={styles.portfolioCents}>.{cents}</Text>
             </View>
             <View style={styles.portfolioChange}>
               <Text style={styles.changeText}>+$0.02</Text>
@@ -152,19 +156,19 @@ export default function Invest() {
 
           {/* Action Buttons */}
           <View style={styles.actionButtons}>
-            <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
+            <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]} onPress={() => changeInvest(1)}>
               <View style={styles.actionButtonIcon}>
                 <TrendingUp size={20} color="white" />
               </View>
               <Text style={styles.actionButtonText}>Trade</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
+            <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]} onPress={() => changeInvest(1)}>
               <View style={styles.actionButtonIcon}>
                 <Plus size={20} color="white" />
               </View>
               <Text style={styles.actionButtonText}>Add money</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]}>
+            <TouchableOpacity style={[styles.actionButton, { width: (width - 8 * 2 - 8 * 3) / 4 }]} onPress={() => changeInvest(-1)}>
               <View style={styles.actionButtonIcon}>
                 <ArrowDown size={20} color="white" />
               </View>
