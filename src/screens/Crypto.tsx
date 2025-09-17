@@ -46,7 +46,6 @@ export default function Crypto() {
             <Text style={styles.balanceAmount}>${balance.toFixed(2)}</Text>
             <Text style={styles.balanceChange}>+$1.13 • +24.17%</Text>
           </View>
-// ...existing code...
 
           {/* Chart */}
           <View style={styles.chartContainer}>
