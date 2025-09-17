@@ -11,6 +11,7 @@ import Transactions from "./src/screens/Transactions";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TrendingUp, Home as HomeIcon, ArrowRightLeft, Bitcoin } from "lucide-react-native";
 import { useColorScheme } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { PortfolioProvider } from "./src/store/portfolio";
 export type RootStackParamList = {
   Tabs: undefined;
@@ -77,13 +78,15 @@ export default function App() {
   return (
     <PortfolioProvider>
       <QueryClientProvider client={queryClient}>
-        <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
-          <StatusBar style="light" />
-          <Stack.Navigator initialRouteName="Tabs" screenOptions={{ headerShown: false, animation: "fade" }}>
-            <Stack.Screen name="Tabs" component={Tabs} />
-            <Stack.Screen name="Transactions" component={Transactions} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <SafeAreaProvider>
+          <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
+            <StatusBar style="light" />
+            <Stack.Navigator initialRouteName="Tabs" screenOptions={{ headerShown: false, animation: "fade" }}>
+              <Stack.Screen name="Tabs" component={Tabs} />
+              <Stack.Screen name="Transactions" component={Transactions} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaProvider>
       </QueryClientProvider>
     </PortfolioProvider>
   );
